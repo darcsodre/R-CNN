@@ -425,7 +425,7 @@ def main():
 
     LOGGER.info("Initializing model...")
     num_classes = len(CLASS_MAP) + 1
-    model = FasterRCNNDetector(num_classes=num_classes, device=DEVICE, lr=1e-4)
+    model = FasterRCNNDetector(num_classes=num_classes, device=DEVICE, lr=5e-5)
 
     LOGGER.info("Starting training...")
     train_loss, val_loss = model.train_model(
@@ -450,9 +450,63 @@ def main():
         val_input_images,
         val_output_annotations,
         iou_thresh=0.5,
-        score_thresh=0.7,
+        score_thresh=0.9,
     )
+
     print("\n=== Métricas de detecção na VALIDAÇÃO ===")
+
+    print(
+        f"Total de defeitos anotados nas imagens de validação (GT): "
+        f"{metrics_val['total_gt']:.0f}"
+    )
+
+    print(
+        f"Total de defeitos detectados pelo modelo (Predições): "
+        f"{metrics_val['total_pred']:.0f}"
+    )
+
+    print(
+        f"Verdadeiros Positivos (TP) – defeitos corretamente detectados: "
+        f"{metrics_val['tp']:.0f}"
+    )
+
+    print(
+        f"Falsos Positivos (FP) – detecções incorretas (alarmes falsos): "
+        f"{metrics_val['fp']:.0f}"
+    )
+
+    print(
+        f"Falsos Negativos (FN) – defeitos reais não detectados pelo modelo: "
+        f"{metrics_val['fn']:.0f}"
+    )
+
+    print(
+        f"Precisão (Precision) – proporção de detecções corretas entre todas as detecções: "
+        f"{metrics_val['precision']:.3f}"
+    )
+
+    print(
+        f"Revocação (Recall) – proporção de defeitos reais que foram detectados: "
+        f"{metrics_val['recall']:.3f}"
+    )
+
+    print(
+        f"F1-score – média harmônica entre precisão e recall: "
+        f"{metrics_val['f1']:.3f}"
+    )
+
+    print(
+        f"IoU médio – sobreposição média entre as caixas previstas e as caixas reais: "
+        f"{metrics_val['mean_iou']:.3f}"
+    )
+
+    print(
+        f"Acurácia de classe – proporção de classes corretamente previstas (quando há match): "
+        f"{metrics_val['cls_acc']:.3f}"
+    )
+
+
+    '''print("\n=== Métricas de detecção na VALIDAÇÃO ===")
     print(f"Total GT:   {metrics_val['total_gt']:.0f}")
     print(f"Total pred: {metrics_val['total_pred']:.0f}")
     print(f"TP:         {metrics_val['tp']:.0f}")
@@ -462,7 +516,7 @@ def main():
     print(f"Recall:     {metrics_val['recall']:.3f}")
     print(f"F1-score:   {metrics_val['f1']:.3f}")
     print(f"IoU médio:  {metrics_val['mean_iou']:.3f}")
-    print(f"Acurácia de classe: {metrics_val['cls_acc']:.3f}")
+    print(f"Acurácia de classe: {metrics_val['cls_acc']:.3f}")'''
 
    
     # === NOVO: métricas no TESTE (10%) ===
@@ -473,7 +527,60 @@ def main():
         iou_thresh=0.5,
         score_thresh=0.7,
     )
+
     print("\n=== Métricas de detecção no TESTE ===")
+
+    print(
+        f"Total de defeitos anotados nas imagens de teste (GT): "
+        f"{metrics_test['total_gt']:.0f}"
+    )
+
+    print(
+        f"Total de defeitos detectados pelo modelo (Predições): "
+        f"{metrics_test['total_pred']:.0f}"
+    )
+
+    print(
+        f"Verdadeiros Positivos (TP) – defeitos corretamente detectados: "
+        f"{metrics_test['tp']:.0f}"
+    )
+
+    print(
+        f"Falsos Positivos (FP) – detecções incorretas (alarmes falsos): "
+        f"{metrics_test['fp']:.0f}"
+    )
+
+    print(
+        f"Falsos Negativos (FN) – defeitos reais não detectados pelo modelo: "
+        f"{metrics_test['fn']:.0f}"
+    )
+
+    print(
+        f"Precisão (Precision) – proporção de detecções corretas entre todas as detecções: "
+        f"{metrics_test['precision']:.3f}"
+    )
+
+    print(
+        f"Revocação (Recall) – proporção de defeitos reais que foram detectados: "
+        f"{metrics_test['recall']:.3f}"
+    )
+
+    print(
+        f"F1-score – média harmônica entre precisão e recall: "
+        f"{metrics_test['f1']:.3f}"
+    )
+
+    print(
+        f"IoU médio – sobreposição média entre as caixas previstas e as caixas reais: "
+        f"{metrics_test['mean_iou']:.3f}"
+    )
+
+    print(
+        f"Acurácia de classe – proporção de classes corretamente previstas (quando há match): "
+        f"{metrics_test['cls_acc']:.3f}"
+    )
+
+    '''print("\n=== Métricas de detecção no TESTE ===")
     print(f"Total GT:   {metrics_test['total_gt']:.0f}")
     print(f"Total pred: {metrics_test['total_pred']:.0f}")
     print(f"TP:         {metrics_test['tp']:.0f}")
@@ -483,7 +590,7 @@ def main():
     print(f"Recall:     {metrics_test['recall']:.3f}")
     print(f"F1-score:   {metrics_test['f1']:.3f}")
     print(f"IoU médio:  {metrics_test['mean_iou']:.3f}")
-    print(f"Acurácia de classe: {metrics_test['cls_acc']:.3f}")
+    print(f"Acurácia de classe: {metrics_test['cls_acc']:.3f}")'''
 
 
     print("\n>>> Avaliação concluída. Agora vou perguntar "
